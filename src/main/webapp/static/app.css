@@ -1,0 +1,32 @@
+.timeaxis2 .sch-header-row-middle .sch-column-header {
+    border      : 0;
+    font-weight : normal;
+}
+
+.timeaxis2 .sch-header-row-middle [data-date*=_210000] {
+    border-right : 1px solid silver;
+}
+
+.timeaxis2 .sch-header-row {
+    border-top : 0;
+}
+
+.sch-hdr-startend .sch-hdr-start {
+    float : left;
+}
+
+.sch-hdr-startend .sch-hdr-end {
+    float : right;
+}
+
+td.sch-nested-hdr-cell-first {
+    border-left : 0 none;
+}
+
+td.sch-nested-hdr-cell-last {
+    border-right : 0 none;
+}
+
+.sch-event-inner {
+    padding: 10px;
+}

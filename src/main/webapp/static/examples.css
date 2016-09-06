@@ -1,0 +1,139 @@
+/**
+ * Some of the examples make use of the Silk icon set by Mark James http://www.famfamfam.com/lab/icons/silk/
+ *
+ */
+
+body {
+    font-family : helvetica, tahoma, verdana, sans-serif;
+    padding     : 32px 20px 20px 20px;
+    font-size   : 13px;
+}
+
+body.bry-examples-framed {
+    padding : 0;
+}
+
+p {
+    margin-bottom : 15px;
+}
+
+h1 {
+    font-size     : large;
+    margin-bottom : 20px;
+}
+
+h2 {
+    font-size   : 14px;
+    color       : #333;
+    font-weight : bold;
+    margin      : 10px 0;
+}
+
+dl,
+dt,
+dd {
+    margin : 0;
+}
+
+pre.code {
+    background  : #F8F8F8;
+    border      : 1px solid #e8e8e8;
+    padding     : 10px;
+    margin      : 10px;
+    margin-left : 0px;
+    border-left : 5px solid #e8e8e8;
+    font-size   : 12px !important;
+    line-height : 14px !important;
+}
+
+a[href] {
+    text-decoration : none;
+}
+
+a[href]:hover {
+    text-decoration : underline;
+}
+
+.sch-event {
+    border-radius : 1px;
+    /*background    : #5fa2dd;*/
+    background    : #FF7C40;
+    border        : none;
+}
+
+.sch-event.sch-event-selected,
+.sch-event.sch-event-hover {
+    box-shadow : none;
+}
+
+.backcolor1 {
+    background : #167abc;
+}
+
+.backcolor2 {
+    background : #03b4d5;
+}
+
+.backcolor3 {
+    background : #27D4F4;
+}
+
+.backcolor4 {
+    background : #9cc96b;
+}
+
+.backcolor5 {
+    background : #ffc107;
+}
+
+.backcolor6 {
+    background : #e44959;
+}
+
+.backcolor7 {
+    background : #925e8b;
+}
+
+.backcolor8 {
+    background : #949495;
+}
+
+.backcolor9 {
+    background : #16b603;
+}
+
+.color1 {
+    background : #167abc;
+}
+
+.color2 {
+    background : #03b4d5;
+}
+
+.color3 {
+    color : #27D4F4;
+}
+
+.color4 {
+    color : #9cc96b;
+}
+
+.color5 {
+    color : #ffc107;
+}
+
+.color6 {
+    color : #e44959;
+}
+
+.color7 {
+    color : #925e8b;
+}
+
+.color8 {
+    color : #949495;
+}
+
+.color9 {
+    color : #16b603;
+}
