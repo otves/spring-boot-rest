@@ -41,10 +41,10 @@ public class RestService {
                             String.format(template, name));
     }
 
-    @RequestMapping("/data")
-    public List<Data> data(@RequestParam(value="name", defaultValue="World") String name) {
-        List<Data> res = new ArrayList<>();
-        res.add(new Data());
+    @RequestMapping("/employees")
+    public List<Employee> employees(@RequestParam(value="name", defaultValue="World") String name) {
+        List<Employee> res = new ArrayList<>();
+        res.add(new Employee());
         return res;
     }
 
