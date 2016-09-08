@@ -9,7 +9,7 @@ public class Person {
 
     private String id;
 
-    private String content;
+    private String name;
 
     private List<Shift> shifts;
 
@@ -23,12 +23,12 @@ public class Person {
         this.id = id;
     }
 
-    public String getContent() {
-        return content;
+    public String getName() {
+        return name;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Collection<Shift> getShifts() {

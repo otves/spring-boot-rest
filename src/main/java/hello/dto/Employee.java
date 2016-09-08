@@ -5,7 +5,7 @@ package hello.dto;
  */
 public class Employee {
     private String id = "0";
-    private String content = "First";
+    private String name = "First";
     private String value = "1";
 
     public String getId() {
@@ -16,12 +16,12 @@ public class Employee {
         this.id = id;
     }
 
-    public String getContent() {
-        return content;
+    public String getName() {
+        return name;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getValue() {

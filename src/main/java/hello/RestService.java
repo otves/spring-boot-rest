@@ -68,37 +68,45 @@ public class RestService {
     }
 
     @RequestMapping("/shifts")
-    public List greeting(@RequestParam(value = "store", required = false) Long store,
-                         @RequestParam(value = "calculation", required = false) Long calculation,
-                         @RequestParam(value = "date", defaultValue = "2016-09-08") Date date) {
+    public List greeting(@RequestParam(value = "store", required = true) Long store,
+                         @RequestParam(value = "calc", required = false) Long calculation,
+                         @RequestParam(value = "from", required = false) Date from,
+                         @RequestParam(value = "to", required = false) Date to) {
 
-        return shiftsPlan(store, calculation, date);
+        return shiftsPlan(store, calculation, from, to);
 
     }
 
-    public static List shiftsPlan(Long store, Long calculation, Date date) {
+    public static List shiftsPlan(Long store, Long calculation, Date from, Date to) {
         List<Person> result = new ArrayList<>();
         HashMap<String, Person> persons = new HashMap<>();
         String sqlQuery = " select persons.id as person_id, persons.name, shifts.id as shift_id, shifts_plan.id as shifts_plan_id, shifts_plan.shift_time, shifts_plan.shift_date from shifts \n" +
                 "/*join staff_positions ON  shifts.staff_position_id = staff_positions.id*/\n" +
                 "join staff_list ON  shifts.staff_person_id = staff_list.id\n" +
                 "join persons ON  staff_list.person_id = persons.id AND persons.active = true\n" +
-                "join shifts_plan ON shifts.id = shifts_plan.shift_id and shifts.store_id = shifts_plan.store_id\n" +
-                "where shifts_plan.shift_date <= :date \n";
-        if (store != null) {
-            sqlQuery += " AND shifts.store_id = :store \n";
+                "join shifts_plan ON shifts.id = shifts_plan.shift_id and shifts.store_id = shifts_plan.store_id\n " +
+                "where shifts.store_id = :store";
+        if (from != null) {
+            sqlQuery += " AND shifts_plan.shift_date >= :from \n";
+        }
+        if (to != null) {
+            sqlQuery += " AND shifts_plan.shift_date <= :to \n";
         }
         if (calculation != null) {
-            sqlQuery += "AND shifts.calc_id = :calc\n";
+            sqlQuery += " AND shifts.calc_id = :calc\n";
         }
-        sqlQuery += "LIMIT 100;";
+        sqlQuery += " LIMIT 10000;";
         logger.info(sqlQuery);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try (final Connection con = configJdbc().getConnection()) {
             try (final NamedParameterStatement sql = new NamedParameterStatement(con, sqlQuery)) {
-                sql.setDate("date", new java.sql.Date(date.getTime()));
-                if (store != null) {
-                    sql.setLong("store", store);
+                sql.setLong("store", store);
+                if (from != null) {
+                    sql.setDate("from", new java.sql.Date(from.getTime()));
+                }
+                if (to != null) {
+                    sql.setDate("to", new java.sql.Date(to.getTime()));
                 }
                 if (calculation != null) {
                     sql.setLong("calc", calculation);
@@ -111,13 +119,14 @@ public class RestService {
                         if (!persons.containsKey(person_id)) {
                             person = new Person();
                             person.setId(person_id);
-                            person.setContent(resultSet.getString("name"));
+                            person.setName(resultSet.getString("name"));
+                            logger.info("person:" + person.getName());
                             persons.put(person_id, person);
                             result.add(person);
                         } else {
                             person = persons.get(person_id);
                         }
-
+                        logger.info(resultSet.getString("shift_id") + "::" + resultSet.getString("shifts_plan_id") + " :: shift_date:" + resultSet.getDate("shift_date") + " :: shift_time:" + resultSet.getDate("shift_time"));
                         String shift_date = dateFormat.format(new Date(resultSet.getDate("shift_date").getTime()));
                         person.incShift(shift_date, resultSet.getString("shifts_plan_id"));
                     }
