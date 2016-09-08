@@ -4,20 +4,12 @@ package hello.dto;
  * Created by otves on 07.09.2016.
  */
 public class Shift {
-    private Long   start;
+    private String   start;
     private Long   end;
-    private String hours;
+    private Integer hours = 0;
     private String planId;
     //store
     private String store;
-
-    public Long getStart() {
-        return start;
-    }
-
-    public void setStart(Long start) {
-        this.start = start;
-    }
 
     public Long getEnd() {
         return end;
@@ -27,11 +19,11 @@ public class Shift {
         this.end = end;
     }
 
-    public String getHours() {
+    public Integer getHours() {
         return hours;
     }
 
-    public void setHours(String hours) {
+    public void setHours(Integer hours) {
         this.hours = hours;
     }
 
@@ -49,5 +41,17 @@ public class Shift {
 
     public void setPlanId(String planId) {
         this.planId = planId;
+    }
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public void incHour() {
+        this.hours++;
     }
 }

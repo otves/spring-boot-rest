@@ -1,4 +1,4 @@
-package hello;
+package hello.jdbc;
 
 import java.sql.*;
 import java.util.*;

@@ -1,4 +1,4 @@
-package hello;
+package hello.dto;
 
 /**
  * @author Sergey Grishchenko on 07.09.16.

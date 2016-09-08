@@ -12,9 +12,7 @@
     <!--<script src="/googleAnalytics.js"></script>-->
 </head>
 <body>
-<p>
-    This example demonstrates custom ordering of groups.
-</p>
+<p>Store <span id="store">1511105 : Бонвиль - 2</span></p>
 <div id="visualization"></div>
 <div id="loading">loading...</div>
 
@@ -42,10 +40,13 @@
                         var shifts = person[prPerson];
                         for (var prShifts in shifts) {
                             var shift =  shifts[prShifts];
-                            var start = new Date();
-                            start.setTime(shift.start);
-                            var end = new Date(start.setTime( start.getTime() + 86400000 ));
-                            itemsData.push({id: shift.planId, group: person.id, content: '1', start: start, end: end});
+                            var start = new Date(shift.start + 'T00:00:00+0300');
+                            var end = new Date(start.getTime() + 86400000 );
+
+                            console.log('start:' + start);
+                            console.log('end:' + end);
+                            console.log('shift:', shift);
+                            itemsData.push({id: shift.planId, group: person.id, content: shift.hours + '', start: start, end: end});
                         }
                     }
                 }
