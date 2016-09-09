@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import hello.dto.Calculation;
 import hello.dto.Employee;
 import hello.dto.Person;
 import hello.dto.Store;
@@ -67,9 +68,32 @@ public class RestService {
         return res;
     }
 
+    @RequestMapping("/calculations")
+    public List<Calculation> calculations(@RequestParam(value = "store") Long store) throws Exception {
+
+       String query = "select calculations.* from calculations \n" +
+                "join shifts ON  calculations.id = shifts.calc_id\n" +
+                "join shifts_plan ON shifts.id = shifts_plan.shift_id and shifts.store_id = calculations.store_id and calculations.org_id = shifts.org_id\n " +
+                "where calculations.store_id = ? and calculations.actual = true";
+
+        List<Calculation> stores = new ArrayList<>();
+        try (final Connection db = configJdbc().getConnection()) {
+            try (final PreparedStatement sql = db.prepareStatement(query)) {
+                sql.setLong(1, store);
+                try (ResultSet resultSet = sql.executeQuery()) {
+                    while (resultSet.next()) {
+                        String interval = resultSet.getString("start_date") +  " - " + resultSet.getString("end_date");
+                        stores.add(new Calculation(resultSet.getString("id"), interval, resultSet.getString("org_id") ));
+                    }
+                }
+            }
+        }
+        return stores;
+    }
+
     @RequestMapping("/shifts")
     public List greeting(@RequestParam(value = "store", required = true) Long store,
-                         @RequestParam(value = "calc", required = false) Long calculation,
+                         @RequestParam(value = "calc", required = true) Long calculation,
                          @RequestParam(value = "from", required = false) Date from,
                          @RequestParam(value = "to", required = false) Date to) {
 
@@ -80,7 +104,7 @@ public class RestService {
     public static List shiftsPlan(Long store, Long calculation, Date from, Date to) {
         List<Person> result = new ArrayList<>();
         HashMap<String, Person> persons = new HashMap<>();
-        String sqlQuery = " select persons.id as person_id, persons.name, shifts.id as shift_id, shifts_plan.id as shifts_plan_id, shifts_plan.shift_time, shifts_plan.shift_date from shifts \n" +
+        String sqlQuery = " select shifts.calc_id as calc_id, persons.id as person_id, persons.name, shifts.id as shift_id, shifts_plan.id as shifts_plan_id, shifts_plan.shift_time, shifts_plan.shift_date from shifts \n" +
                 "/*join staff_positions ON  shifts.staff_position_id = staff_positions.id*/\n" +
                 "join staff_list ON  shifts.staff_person_id = staff_list.id\n" +
                 "join persons ON  staff_list.person_id = persons.id AND persons.active = true\n" +
@@ -126,7 +150,7 @@ public class RestService {
                         } else {
                             person = persons.get(person_id);
                         }
-                        logger.info(resultSet.getString("shift_id") + "::" + resultSet.getString("shifts_plan_id") + " :: shift_date:" + resultSet.getDate("shift_date") + " :: shift_time:" + resultSet.getDate("shift_time"));
+                        logger.info(resultSet.getString("calc_id") + "::" + resultSet.getString("shifts_plan_id") + " :: shift_date:" + resultSet.getDate("shift_date") + " :: shift_time:" + resultSet.getDate("shift_time"));
                         String shift_date = dateFormat.format(new Date(resultSet.getDate("shift_date").getTime()));
                         person.incShift(shift_date, resultSet.getString("shifts_plan_id"));
                     }

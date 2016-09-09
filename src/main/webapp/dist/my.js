@@ -40,11 +40,49 @@ $(function () {
             //$("#fromDatepicker").datepicker("option", "minDate", selectedDate );
         }
     });
+
+    //$("#fromDatepicker").on('blur',function(e){
+    //    from = $(this).val();
+    //    if(from) {
+    //        updateTimeLine();
+    //    }
+    //    $("#toDatepicker").datepicker("option", "minDate", from);
+    //});
+    //
+    //$("#toDatepicker").on('blur',function(e){
+    //    to = $(this).val();
+    //    if(to) {
+    //        updateTimeLine();
+    //    }
+   // });
 });
 
 $("#storeList").click(function () {
     if ($(this).find("option").size() > 0) {
         store = $(this).val();
+        updateCalculations();
+        updateTimeLine();
+    } else {
+        alert("empty");
+    }
+});
+
+
+
+function updateCalculations() {
+    $.getJSON("/rest/calculations?store=" + store, null, function (data) {
+        $("#calculationList option").remove();
+        $("#calculationList").append("<option value=''>-</option>");
+        $.each(data, function (i, item) {
+            $("#calculationList").append("<option value=" + item.id + ">" + item.interval + "</option>");
+        });
+    });
+
+}
+
+$("#calculationList").click(function () {
+    if ($(this).find("option").size() > 0) {
+        calc = $(this).val();
         updateTimeLine();
     } else {
         alert("empty");
@@ -52,7 +90,7 @@ $("#storeList").click(function () {
 });
 
 function updateTimeLine() {
-    if (!store) {
+    if (!store || !calc) {
         return
     }
     document.getElementById('loading').style.display = 'true';
