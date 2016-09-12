@@ -71,9 +71,9 @@ public class RestService {
     @RequestMapping("/calculations")
     public List<Calculation> calculations(@RequestParam(value = "store") Long store) throws Exception {
 
-       String query = "select calculations.* from calculations \n" +
-                "join shifts ON  calculations.id = shifts.calc_id\n" +
-                "join shifts_plan ON shifts.id = shifts_plan.shift_id and shifts.store_id = calculations.store_id and calculations.org_id = shifts.org_id\n " +
+       String query = "select distinct calculations.* from calculations \n" +
+                //"join shifts ON  calculations.id = shifts.calc_id\n" +
+                "join shifts_plan ON calculations.id = shifts_plan.calc_id \n " +
                 "where calculations.store_id = ? and calculations.actual = true";
 
         List<Calculation> stores = new ArrayList<>();
@@ -95,13 +95,17 @@ public class RestService {
     public List greeting(@RequestParam(value = "store", required = true) Long store,
                          @RequestParam(value = "calc", required = true) Long calculation,
                          @RequestParam(value = "from", required = false) Date from,
-                         @RequestParam(value = "to", required = false) Date to) {
+                         @RequestParam(value = "to", required = false) Date to) throws Exception {
 
         return shiftsPlan(store, calculation, from, to);
 
     }
 
-    public static List shiftsPlan(Long store, Long calculation, Date from, Date to) {
+    public static List shiftsPlan(Long store, Long calculation, Date from, Date to) throws Exception {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
         List<Person> result = new ArrayList<>();
         HashMap<String, Person> persons = new HashMap<>();
         String sqlQuery = " select shifts.calc_id as calc_id, persons.id as person_id, persons.name, shifts.id as shift_id, shifts_plan.id as shifts_plan_id, shifts_plan.shift_time, shifts_plan.shift_date from shifts \n" +
@@ -121,8 +125,7 @@ public class RestService {
         }
         sqlQuery += " LIMIT 10000;";
         logger.info(sqlQuery);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
         try (final Connection con = configJdbc().getConnection()) {
             try (final NamedParameterStatement sql = new NamedParameterStatement(con, sqlQuery)) {
                 sql.setLong("store", store);

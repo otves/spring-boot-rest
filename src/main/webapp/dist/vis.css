@@ -49,7 +49,7 @@ div.vis-configuration.vis-config-option-container{
     padding-left:5px;
 }
 
-div.vis-configuration.vis-config-button{
+div.vis-configuration.vis-config-button {
     display:block;
     width:495px;
     height:25px;
@@ -65,13 +65,13 @@ div.vis-configuration.vis-config-button{
     margin-bottom:30px;
 }
 
-div.vis-configuration.vis-config-button.hover{
+div.vis-configuration.vis-config-button.hover {
     background-color: #4588e6;
     border:2px solid #214373;
     color:#ffffff;
 }
 
-div.vis-configuration.vis-config-item{
+div.vis-configuration.vis-config-item {
     display:block;
     float:left;
     width:495px;
