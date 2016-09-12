@@ -15,7 +15,7 @@ $.getJSON("/rest/stores", null, function (data) {
 });
 
 $(function () {
-    $("#fromDatepicker").datepicker({
+    var dateFrom =   $("#fromDatepicker").datepicker({
         dateFormat: 'yy-mm-dd',
         //changeMonth: true,
         //changeYear: true,
@@ -27,7 +27,7 @@ $(function () {
             $("#toDatepicker").datepicker("option", "minDate", selectedDate);
         }
     });
-    $("#toDatepicker").datepicker({
+   var dateTo = $("#toDatepicker").datepicker({
         dateFormat: 'yy-mm-dd',
         //changeMonth: true,
         //changeYear: true,
@@ -40,6 +40,26 @@ $(function () {
             //$("#fromDatepicker").datepicker("option", "minDate", selectedDate );
         }
     });
+
+    $('#clearFromDate').on('click', function() {
+        document.getElementById('fromDatepicker').value = null;
+        $("#toDatepicker").datepicker( "option" , {
+            minDate: null,
+            maxDate: null});
+        from = null;
+        updateTimeLine();
+    });
+
+    $('#clearToDate').on('click', function() {
+        document.getElementById('toDatepicker').value = null
+        dateTo.attr('value', '');
+        dateTo.datepicker( "option" , {
+            minDate: null,
+            maxDate: null} );
+        to = null;
+        updateTimeLine();
+    });
+
 
     //$("#fromDatepicker").on('blur',function(e){
     //    from = $(this).val();
